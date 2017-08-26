@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="https://www.gstatic.com/firebasejs/4.3.0/firebase.js"></script>
+</head>
+<body onload='func()' >
+        <pre id="object" ></pre>
+        <form onSubmit='return hello()'>
+                <input type="text" id='hey' placeholder="Write your todo" />
+                <button>Add Todo</button>
+              </form>
+    <script>
+      // Initialize Firebase
+      var config = {
+        apiKey: "AIzaSyDdb8NTGTwJjXqwhb59p-BETO2eNpepGMk",
+        authDomain: "projects-database-61ad8.firebaseapp.com",
+        databaseURL: "https://projects-database-61ad8.firebaseio.com",
+        projectId: "projects-database-61ad8",
+        storageBucket: "projects-database-61ad8.appspot.com",
+        messagingSenderId: "110420406286"
+      };
+      firebase.initializeApp(config);
+      var object1 = document.getElementById('object') ;
+      var object = document.getElementById('hey') ;
+      function hello(){
+          console.log(object.value)
+          var refRoot = firebase.database().ref('/data/') ;
+          refRoot.set({ todo: object.value }) ;
+          return false;
+      }
+      function func(){
+          
+        var refRoot = firebase.database().ref('/data/')
+       refRoot.on("child_added", (snap) => {
+      var obj = snap.val();
+        console.log(obj)
+        object1.innerText = obj ;
+    //   obj.id = snap.key
+       })
+      
+      }
+      
+    </script>
+</body>
+</html>
