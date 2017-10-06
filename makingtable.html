@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="https://www.gstatic.com/firebasejs/4.5.0/firebase.js"></script>
+
+</head>
+<body>
+    <input id="txt1" type="text" />
+    <input id="txt2" type="text" />
+    <input type="button" onclick="funct()" value="Add" />
+    <input type="button" onclick="edit()" value="Edit" />
+    <input type="button" onclick="del()" value="Delete" />
+    <table id='table'></table>
+</body>
+<script type="text/javascript" >
+        var config = {
+          apiKey: "AIzaSyBgcYJb9fliput71SPlQD0P_h1ToLwZNwU",
+          authDomain: "nile-book.firebaseapp.com",
+          databaseURL: "https://nile-book.firebaseio.com",
+          projectId: "nile-book",
+          storageBucket: "nile-book.appspot.com",
+          messagingSenderId: "996025227285"
+        };
+        firebase.initializeApp(config);
+        var li = document.getElementById('list') ;
+        var db = firebase.database().ref().child('object') ;
+function funct(){
+        var txt1 = document.getElementById('txt1').value ;
+        var txt2 = document.getElementById('txt2').value ;
+        var txt = {txt1 ,txt2}
+            db.push(txt) ;
+            document.getElementById('txt1').value= "" ;
+            document.getElementById('txt2').value= "" ;
+        }   
+        db.on('child_added' , (snap)=> {
+            var rIndex, table = document.getElementById("table");
+            var newRow = table.insertRow(table.length),
+                cell0 = newRow.insertCell(0) ,
+                cell1 = newRow.insertCell(1) ;
+            cell0.innerHTML = snap.val().txt1
+            cell1.innerHTML = snap.val().txt2 ;
+            newRow.id = snap.key ;
+               selectrow(); 
+            })
+
+            function selectrow(){
+                for (var i = 0; i < table.rows.length; i++) {
+                    table.rows[i].onclick = function (i , v) {
+                      rIndex = this.id;
+                    //   console.log(rIndex)
+                      document.getElementById('txt1').value = this.cells[0].innerHTML;
+                      document.getElementById('txt2').value = this.cells[1].innerHTML;
+                    }
+                }
+            // console.log(rIndex) ;
+            }
+            function edit(){   
+                    var txt1 = document.getElementById('txt1').value ;
+                    var txt2 = document.getElementById('txt2').value ;
+                            var txt = { txt1, txt2}
+                    // console.log(rIndex)
+                    db.child(rIndex).set(txt) ;
+                    document.getElementById('txt1').value = "" ;
+                    document.getElementById('txt2').value = "" ;
+                            // table.rows[rIndex].cells[0].innerHTML = txt1 ;
+                            // table.rows[rIndex].cells[1].innerHTML = txt2 ;
+            }
+
+            function del(){
+                db.child(rIndex).remove() ;
+                    var txt1 = document.getElementById('txt1').value , txt2 = document.getElementById('txt2').value ;
+                    document.getElementById('txt1').value = "" ;
+                    document.getElementById('txt2').value = "" ;
+            }
+            db.on('child_changed' , (snap)=> {
+                table.rows[rIndex].cells[0].innerHTML = snap.val().txt1 ;
+                table.rows[rIndex].cells[1].innerHTML = snap.val().txt2 ;
+            //    console.log(tr)
+            //    var td = tr.getElementsByTagName("td");
+            //    console.log(td)
+                // cell0.innerHTML = snap.val().txt1
+                // cell1.innerHTML = snap.val().txt2 ;
+            //    selectrow(); 
+            })
+
+
+            db.on('child_removed' , snap => {
+               table.rows[rIndex].remove() ;
+               selectrow(); 
+            })
+
+            
+            
+    </script>
+</html>
