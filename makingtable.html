@@ -51,23 +51,18 @@ function funct(){
                 for (var i = 0; i < table.rows.length; i++) {
                     table.rows[i].onclick = function (i , v) {
                       rIndex = this.id;
-                    //   console.log(rIndex)
                       document.getElementById('txt1').value = this.cells[0].innerHTML;
                       document.getElementById('txt2').value = this.cells[1].innerHTML;
                     }
                 }
-            // console.log(rIndex) ;
             }
             function edit(){   
                     var txt1 = document.getElementById('txt1').value ;
                     var txt2 = document.getElementById('txt2').value ;
                             var txt = { txt1, txt2}
-                    // console.log(rIndex)
                     db.child(rIndex).set(txt) ;
                     document.getElementById('txt1').value = "" ;
                     document.getElementById('txt2').value = "" ;
-                            // table.rows[rIndex].cells[0].innerHTML = txt1 ;
-                            // table.rows[rIndex].cells[1].innerHTML = txt2 ;
             }
 
             function del(){
@@ -79,12 +74,6 @@ function funct(){
             db.on('child_changed' , (snap)=> {
                 table.rows[rIndex].cells[0].innerHTML = snap.val().txt1 ;
                 table.rows[rIndex].cells[1].innerHTML = snap.val().txt2 ;
-            //    console.log(tr)
-            //    var td = tr.getElementsByTagName("td");
-            //    console.log(td)
-                // cell0.innerHTML = snap.val().txt1
-                // cell1.innerHTML = snap.val().txt2 ;
-            //    selectrow(); 
             })
 
 
@@ -92,8 +81,6 @@ function funct(){
                table.rows[rIndex].remove() ;
                selectrow(); 
             })
-
-            
-            
+  
     </script>
 </html>
